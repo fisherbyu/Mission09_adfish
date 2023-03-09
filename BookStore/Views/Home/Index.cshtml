@@ -4,18 +4,7 @@
 
 @foreach (Book book in Model.Books)
 {
-    <div>
-        <h3>@book.Title</h3>
-        <ul>
-            <li>@book.Author</li>
-            <li>@book.Publisher</li>
-            <li>@book.Isbn</li>
-            <li>@book.Classification</li>
-            <li>@book.Category</li>
-            <li>@book.PageCount pages</li>
-            <li>$@book.Price</li>
-        </ul>
-    </div>
+    <partial name="BookDetails" model="book"/>
 }
 
 <div page-action="Index" >

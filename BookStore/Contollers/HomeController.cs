@@ -13,7 +13,7 @@ namespace BookStore.Contollers
         private IBookStoreRepository BookRepo;
 
         public HomeController(IBookStoreRepository temp) => BookRepo = temp;
-        public IActionResult Index(int pageNum = 1)
+        public IActionResult Index(string bookCategory, int pageNum = 1)
         {
             int resultLength = 10;
             int pageNumber = pageNum;
@@ -21,6 +21,7 @@ namespace BookStore.Contollers
             var data = new BooksViewModel
             {
                 Books = BookRepo.Books
+                .Where(x => x.Category == bookCategory || bookCategory == null)
                 .OrderBy(b => b.Title)
                 .Skip((pageNum - 1) * resultLength)
                 .Take(resultLength),
