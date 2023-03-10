@@ -41,7 +41,7 @@ namespace BookStore.Pages
 
             HttpContext.Session.SetJSON("cart", cart);
 
-            return RedirectToPage();
+            return RedirectToPage(new { ReturnUrl = returnUrl});
         }
     }
 }
