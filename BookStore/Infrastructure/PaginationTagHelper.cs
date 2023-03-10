@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookStore.Models.Infrastructure
+namespace BookStore.Infrastructure
 {
     [HtmlTargetElement("div", Attributes = "page-model")]
     public class PaginationTagHelper : TagHelper
@@ -36,28 +36,35 @@ namespace BookStore.Models.Infrastructure
 
         public override void Process (TagHelperContext thc, TagHelperOutput tho)
         {
+            //Access DOM
             IUrlHelper uh = uhf.GetUrlHelper(vc);
 
+            //Create Final Tag to Output
             TagBuilder final = new TagBuilder("div");
 
-            for (int i = 1; i <= PageModel.TotalPages; i++)
+
+            //Only print pagination buttons if enough pages to paginate
+            if (PageModel.TotalPages > 1)
             {
-                TagBuilder tb = new TagBuilder("a");
-
-                tb.Attributes["href"] = uh.Action(PageAction, new { pageNum = i });
-                if (PageClassesEnabled)
+                //Loop through all the needed buttons
+                for (int i = 1; i <= PageModel.TotalPages; i++)
                 {
-                    tb.AddCssClass(PageClass);
-                    tb.AddCssClass(i == PageModel.CurrentPage
-                        ? PageClassSelected : PageClassNormal);
+                    //Generate HTML for buttons
+                    TagBuilder tb = new TagBuilder("a");
+
+                    tb.Attributes["href"] = uh.Action(PageAction, new { pageNum = i });
+                    if (PageClassesEnabled)
+                    {
+                        tb.AddCssClass(PageClass);
+                        tb.AddCssClass(i == PageModel.CurrentPage
+                            ? PageClassSelected : PageClassNormal);
+                    }
+                    tb.InnerHtml.Append(i.ToString());
+
+                    final.InnerHtml.AppendHtml(tb);
                 }
-                tb.InnerHtml.Append(i.ToString());
-
-                final.InnerHtml.AppendHtml(tb);
-
+                tho.Content.AppendHtml(final.InnerHtml);
             }
-
-            tho.Content.AppendHtml(final.InnerHtml);
         }
     }
 }
