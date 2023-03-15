@@ -20,7 +20,7 @@ namespace BookStore.Models
         }
 
         public virtual DbSet<Book> Books { get; set; }
-
+        public virtual DbSet<Order> Orders { get; set; }
         
     }
 }

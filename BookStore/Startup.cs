@@ -31,13 +31,17 @@ namespace BookStore
             {
                 options.UseSqlite(Configuration["ConnectionStrings:BookDBConnection"]);
             });
-
+            //Allow for Repo Implementation of Books and Orders
             services.AddScoped<IBookStoreRepository, EFBookStoreRepository>();
-
+            services.AddScoped<IOrderRepository, EFOrderRepository>();
+            //Implement PAges
             services.AddRazorPages();
-
+            //Allow for Client Session
             services.AddDistributedMemoryCache();
             services.AddSession();
+            //Push cart to Session
+            services.AddScoped<Cart>(x => SessionCart.GetCart(x));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
